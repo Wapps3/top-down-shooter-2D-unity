@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6120878455523867213}
   - component: {fileID: 3194375174007822186}
   - component: {fileID: -636948062877711662}
+  - component: {fileID: -1447383982721687375}
   m_Layer: 0
   m_Name: Building1
   m_TagString: Untagged
@@ -46,6 +47,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -107,3 +109,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &-1447383982721687375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344665189898235684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7d4829da9260d4e928ece5d33c0ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 10
+  HealthMax: 10
+  Point: -10
