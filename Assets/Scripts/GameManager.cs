@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public Text timeText;
 
-    public long score;
+    private long score;
+    public long Score{ get { return score; } }
+
     public float time;
 
     private bool end;
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Score(long Point)
+    public void IncrementScore(long Point)
     {
         score += Point;
     }
@@ -74,19 +76,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Could not post score: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
         });
 
-        //Show HighScore
-        currentGamer.Scores.Domain("private").BestHighScores("TopDownShooter", 10, 1)
-        .Done(bestHighScoresRes => {
-            foreach (var score in bestHighScoresRes)
-                Debug.Log(score.Rank + ". " + score.GamerInfo["profile"]["displayName"] + ": " + score.Value);
-        }, ex => {
-            // The exception should always be CotcException
-            CotcException error = (CotcException)ex;
-            Debug.LogError("Could not get best high scores: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
-        });
-
         end = true;
-
         StartCoroutine(LoadEndScene());
     }
 
@@ -104,7 +94,10 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        // Move the GameObject (you attach this in the Inspector) to the newly loaded Scene
+        gameObject.SetActive(false);
+
+        // Move the GameObject which hold information about the player and his score
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("EndScene"));
         SceneManager.MoveGameObjectToScene(CotcSdk.gameObject, SceneManager.GetSceneByName("EndScene"));
         SceneManager.MoveGameObjectToScene(loginManager.gameObject, SceneManager.GetSceneByName("EndScene"));
 

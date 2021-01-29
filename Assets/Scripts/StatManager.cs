@@ -14,7 +14,7 @@ public class StatManager : MonoBehaviour
         {
             Health = 0;
             GameManager gameManager = FindObjectOfType<GameManager>();
-            gameManager.Score(Point);
+            gameManager.IncrementScore(Point);
 
             Destroy(gameObject);
         }
