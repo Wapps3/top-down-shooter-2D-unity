@@ -10,15 +10,19 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    public Button loginAnonymousButton;
-    public Button loginCrendentialButton;
+    public GameObject CanvasLogin;
 
-    public InputField email;
-    public InputField password;
+    public Button LoginAnonymousButton;
+    public Button LoginCrendentialButton;
+
+    public InputField Email;
+    public InputField Password;
    
-    public Text messageText;
+    public Text MessageText;
 
     private Cloud Cloud;
+    private Gamer CurrentGamer;
+
     private string gamerID;
     private string gamerSecret;
 
@@ -26,35 +30,8 @@ public class LoginManager : MonoBehaviour
     void Start()
     {
         //Link Button to function
-        loginAnonymousButton.onClick.AddListener(LoginAnonymous);
-        loginCrendentialButton.onClick.AddListener(LoginCredential);
-
-        // Link with the CotC Game Object
-        var cb = FindObjectOfType<CotcGameObject>();
-        if (cb == null)
-        {
-            Debug.LogError("Please put a Clan of the Cloud prefab in your scene!");
-            return;
-        }
-        // Log unhandled exceptions (.Done block without .Catch -- not called if there is any .Then)
-        Promise.UnhandledException += (object sender, ExceptionEventArgs e) => {
-            Debug.LogError("Unhandled exception: " + e.Exception.ToString());
-        };
-        // Initiate getting the main Cloud object
-        cb.GetCloud().Done(cloud => {
-            Cloud = cloud;
-            // Retry failed HTTP requests once
-            Cloud.HttpRequestFailedHandler = (HttpRequestFailedEventArgs e) => {
-                if (e.UserData == null)
-                {
-                    e.UserData = new object();
-                    e.RetryIn(1000);
-                }
-                else
-                    e.Abort();
-            };
-            Debug.Log("Setup done");
-        });
+        LoginAnonymousButton.onClick.AddListener(LoginAnonymous);
+        LoginCrendentialButton.onClick.AddListener(LoginCredential);
     }
 
     // Update is called once per frame
@@ -71,6 +48,7 @@ public class LoginManager : MonoBehaviour
         {
             cloud.LoginAnonymously()
             .Done(gamer => {
+                CurrentGamer = gamer;
                 Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
                 Debug.Log("Login data: " + gamer);
                 Debug.Log("Server time: " + gamer["servertime"]);
@@ -87,21 +65,19 @@ public class LoginManager : MonoBehaviour
 
     void LoginCredential()
     {
-        messageText.text = "";
+        MessageText.text = "";
         
-        if (password.text != "")
+        if (Password.text != "")
         {
-            Debug.Log(email.text);
-            Debug.Log(password.text);
-
             var cotc = FindObjectOfType<CotcGameObject>();
 
             cotc.GetCloud().Done(cloud => {
-                Cloud.Login(
+                cloud.Login(
                     network: "email",
-                    networkId: email.text,
-                    networkSecret: password.text)
+                    networkId: Email.text,
+                    networkSecret: Password.text)
                 .Done(gamer => {
+                    CurrentGamer = gamer;
                     Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
                     Debug.Log("Login data: " + gamer);
                     Debug.Log("Server time: " + gamer["servertime"]);
@@ -116,14 +92,19 @@ public class LoginManager : MonoBehaviour
         }
         else
         {
-            messageText.text = "Password must be filled";
+            MessageText.text = "Password must be filled";
         }
         
     }
 
     void LaunchGame()
     {
-        gameObject.SetActive(false);
+        CanvasLogin.SetActive(false);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
+    }
+
+    public Gamer GetGamer()
+    {
+        return CurrentGamer;
     }
 }
