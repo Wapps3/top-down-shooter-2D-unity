@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private CotcGameObject CotcSdk;
+    private LoginManager loginManager;
+
     public Text scoreText;
     public Text timeText;
 
@@ -21,7 +24,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        end = false;
+        loginManager = FindObjectOfType<LoginManager>();
+        CotcSdk = FindObjectOfType<CotcGameObject>();
     }
 
     // Update is called once per frame
@@ -46,9 +50,6 @@ public class GameManager : MonoBehaviour
            if(end == false)
                 EndGame();
         }
-
-        LoginManager loginManager = FindObjectOfType<LoginManager>();
-
     }
 
     public void Score(long Point)
@@ -58,8 +59,6 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        LoginManager loginManager = FindObjectOfType<LoginManager>();
-
         Gamer currentGamer = loginManager.GetGamer();
 
         Debug.Log(currentGamer.GamerId);
@@ -88,6 +87,28 @@ public class GameManager : MonoBehaviour
 
         end = true;
 
-        SceneManager.LoadScene("EndScene", LoadSceneMode.Additive);
+        StartCoroutine(LoadEndScene());
+    }
+
+    IEnumerator LoadEndScene()
+    {
+        // Set the current Scene to be able to unload it later
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // The Application loads the Scene in the background at the same time as the current Scene.
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("EndScene", LoadSceneMode.Additive);
+
+        // Wait until the last operation fully loads to return anything
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        // Move the GameObject (you attach this in the Inspector) to the newly loaded Scene
+        SceneManager.MoveGameObjectToScene(CotcSdk.gameObject, SceneManager.GetSceneByName("EndScene"));
+        SceneManager.MoveGameObjectToScene(loginManager.gameObject, SceneManager.GetSceneByName("EndScene"));
+
+        // Unload the previous Scene
+        SceneManager.UnloadSceneAsync(currentScene);
     }
 }

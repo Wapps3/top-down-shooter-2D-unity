@@ -662,7 +662,6 @@ GameObject:
   - component: {fileID: 890015329}
   - component: {fileID: 890015328}
   - component: {fileID: 890015327}
-  - component: {fileID: 890015331}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -754,23 +753,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &890015331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 890015326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fb22b03649da994a9e7f100db48fa11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loginAnonymousButton: {fileID: 244416554}
-  loginCrendentialButton: {fileID: 685973782}
-  email: {fileID: 1150336233}
-  password: {fileID: 1633918257}
-  messageText: {fileID: 737179873}
 --- !u!1 &938255618
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,7 +778,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938255618}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &938255620
 Camera:
   m_ObjectHideFlags: 0
@@ -854,6 +836,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &972398381 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000013107584546, guid: 7eb10c3f701753b4a9afe7378b09c472,
+    type: 3}
+  m_PrefabInstance: {fileID: 410380442}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1037320501
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,3 +1504,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872356362}
   m_CullTransparentMesh: 0
+--- !u!1 &1998454311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1998454313}
+  - component: {fileID: 1998454312}
+  m_Layer: 0
+  m_Name: LoginManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1998454312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998454311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fb22b03649da994a9e7f100db48fa11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CotcSdk: {fileID: 972398381}
+  CanvasLogin: {fileID: 890015326}
+  LoginAnonymousButton: {fileID: 244416554}
+  LoginCrendentialButton: {fileID: 685973782}
+  Email: {fileID: 1150336233}
+  Password: {fileID: 1633918257}
+  MessageText: {fileID: 737179873}
+--- !u!4 &1998454313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998454311}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.125074, y: 6.631821, z: -5.578125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

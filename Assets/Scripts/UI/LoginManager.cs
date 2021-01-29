@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    public GameObject CanvasLogin;
+    public GameObject CotcSdk;
 
     public Button LoginAnonymousButton;
     public Button LoginCrendentialButton;
@@ -25,6 +25,8 @@ public class LoginManager : MonoBehaviour
 
     private string gamerID;
     private string gamerSecret;
+
+    private AsyncOperation sceneAsync;
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +61,7 @@ public class LoginManager : MonoBehaviour
             });
         });
 
-        LaunchGame();
+        StartCoroutine(LoadGameScene());
 
     }
 
@@ -88,7 +90,7 @@ public class LoginManager : MonoBehaviour
                 });
             });
 
-            LaunchGame();
+            StartCoroutine(LoadGameScene());
         }
         else
         {
@@ -97,10 +99,27 @@ public class LoginManager : MonoBehaviour
         
     }
 
-    void LaunchGame()
+    IEnumerator LoadGameScene()
     {
-        CanvasLogin.SetActive(false);
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
+        // Set the current Scene to be able to unload it later
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // The Application loads the Scene in the background at the same time as the current Scene.
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Additive);
+
+        // Wait until the last operation fully loads to return anything
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        // Move the GameObject (you attach this in the Inspector) to the newly loaded Scene
+        SceneManager.MoveGameObjectToScene(CotcSdk, SceneManager.GetSceneByName("GameScene"));
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("GameScene"));
+
+
+        // Unload the previous Scene
+        SceneManager.UnloadSceneAsync(currentScene);
     }
 
     public Gamer GetGamer()
