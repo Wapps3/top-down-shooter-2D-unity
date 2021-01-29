@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        Gamer currentGamer = loginManager.GetGamer();
+        Gamer currentGamer = loginManager.CurrentGamer;
 
         Debug.Log(currentGamer.GamerId);
 

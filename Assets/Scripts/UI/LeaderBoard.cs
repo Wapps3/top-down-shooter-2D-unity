@@ -39,7 +39,7 @@ public class LeaderBoard : MonoBehaviour
 
         Score.text = (GameManagerObject.Score).ToString();
 
-        Gamer currentGamer = loginManager.GetGamer();
+        Gamer currentGamer = loginManager.CurrentGamer;
 
         //Show HighScore
         currentGamer.Scores.Domain("private").BestHighScores("TopDownShooter", LeaderBoardScore.Count, 1)
