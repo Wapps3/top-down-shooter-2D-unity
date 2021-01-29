@@ -290,7 +290,7 @@ GameObject:
   - component: {fileID: 244416555}
   - component: {fileID: 244416554}
   m_Layer: 5
-  m_Name: LoginAnonymousButton
+  m_Name: PlayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 890015328}
   - component: {fileID: 890015327}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: CanvasMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1534,9 +1534,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CotcSdk: {fileID: 972398381}
-  CanvasLogin: {fileID: 890015326}
-  LoginAnonymousButton: {fileID: 244416554}
-  LoginCrendentialButton: {fileID: 685973782}
+  PlayButton: {fileID: 244416554}
+  LoginButton: {fileID: 685973782}
   Email: {fileID: 1150336233}
   Password: {fileID: 1633918257}
   MessageText: {fileID: 737179873}
