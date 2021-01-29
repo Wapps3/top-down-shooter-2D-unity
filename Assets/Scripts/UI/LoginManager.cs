@@ -40,7 +40,12 @@ public class LoginManager : MonoBehaviour
     public Image avatar;
 
     public Button fisrtNameEditButton;
+
+    public InputField newFirstName;
+    public Button confirmFisrtName;
+
     public Button emailEditButton;
+    public InputField newEmail;
 
 
     // Start is called before the first frame update
@@ -49,12 +54,42 @@ public class LoginManager : MonoBehaviour
         //Link Button to function
         PlayButton.onClick.AddListener(Play);
         LoginButton.onClick.AddListener(Login);
+
+        //Link Button to edit player's profrile
+        fisrtNameEditButton.onClick.AddListener( delegate {newFirstName.gameObject.SetActive(true); } );
+        emailEditButton.onClick.AddListener(EditEmail);
+
+        confirmFisrtName.onClick.AddListener(ConfirmNewFirstName);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    void ConfirmNewFirstName()
+    {
+            Bundle profileUpdates = Bundle.CreateObject();
+            profileUpdates["firstName"] = new Bundle(newFirstName.text);
+
+            // currentGamer is an object retrieved after one of the different Login functions.
+            currentGamer.Profile.Set(profileUpdates)
+            .Done(profileRes => {
+                Debug.Log("Profile data set: " + profileRes.ToString());
+            }, ex => {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+                Debug.LogError("Could not set profile data due to error: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+            });
+
+        newFirstName.gameObject.SetActive(false);
+        SetPlayerInformation();
+    }
+
+    void EditEmail()
+    {
+       
     }
 
     void Play()
