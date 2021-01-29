@@ -12,8 +12,8 @@ public class LoginManager : MonoBehaviour
 {
     public GameObject CotcSdk;
 
-    public Button LoginAnonymousButton;
-    public Button LoginCrendentialButton;
+    public Button PlayButton;
+    public Button LoginButton;
 
     public InputField Email;
     public InputField Password;
@@ -21,82 +21,140 @@ public class LoginManager : MonoBehaviour
     public Text MessageText;
 
     private Cloud Cloud;
-    private Gamer CurrentGamer;
+
+    private Gamer currentGamer;
+    public Gamer CurrentGamer { get { return currentGamer; } }
 
     private string gamerID;
     private string gamerSecret;
 
     private AsyncOperation sceneAsync;
 
+    //UI info player
+    public Image playerInfomartion;
+
+    public Text displayName;
+    public Text fisrtName;
+    public Text emailPlayer;
+
+    public Image avatar;
+
+    public Button fisrtNameEditButton;
+    public Button emailEditButton;
+
+
     // Start is called before the first frame update
     void Start()
     {
         //Link Button to function
-        LoginAnonymousButton.onClick.AddListener(LoginAnonymous);
-        LoginCrendentialButton.onClick.AddListener(LoginCredential);
+        PlayButton.onClick.AddListener(Play);
+        LoginButton.onClick.AddListener(Login);
     }
 
     // Update is called once per frame
     void Update()
     {
-     
+
     }
 
-    void LoginAnonymous()
+    void Play()
     {
-        var cotc = FindObjectOfType<CotcGameObject>();
+        //Test to know if a player is connected or launch in guest mode
+        if (currentGamer == null)
+        { 
+            var cotc = FindObjectOfType<CotcGameObject>();
 
-        cotc.GetCloud().Done(cloud => 
-        {
-            cloud.LoginAnonymously()
-            .Done(gamer => {
-                CurrentGamer = gamer;
-                Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
-                Debug.Log("Login data: " + gamer);
-                Debug.Log("Server time: " + gamer["servertime"]);
-            }, ex => {
-                // The exception should always be CotcException
-                CotcException error = (CotcException)ex;
-                Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
+            cotc.GetCloud().Done(cloud =>
+            {
+                cloud.LoginAnonymously()
+                .Done(gamer => {
+                    currentGamer = gamer;
+                    Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
+                    Debug.Log("Login data: " + gamer);
+                    Debug.Log("Server time: " + gamer["servertime"]);
+                }, ex => {
+                        // The exception should always be CotcException
+                        CotcException error = (CotcException)ex;
+                    Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
+                });
             });
-        });
+        }
 
         StartCoroutine(LoadGameScene());
 
     }
 
-    void LoginCredential()
+    void Login()
     {
         MessageText.text = "";
-        
-        if (Password.text != "")
-        {
-            var cotc = FindObjectOfType<CotcGameObject>();
 
-            cotc.GetCloud().Done(cloud => {
-                cloud.Login(
-                    network: "email",
-                    networkId: Email.text,
-                    networkSecret: Password.text)
-                .Done(gamer => {
-                    CurrentGamer = gamer;
-                    Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
-                    Debug.Log("Login data: " + gamer);
-                    Debug.Log("Server time: " + gamer["servertime"]);
-                }, ex => {
-                // The exception should always be CotcException
-                CotcException error = (CotcException)ex;
-                    Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
-                });
-            });
-
-            StartCoroutine(LoadGameScene());
-        }
-        else
+        if (Password.text == "")
         {
             MessageText.text = "Password must be filled";
+            return;
         }
+
+        StartCoroutine(WaitLogin());
+    }
+
+    IEnumerator WaitLogin()
+    {
+        bool connectionEstablish = false;
+
+        var cotc = FindObjectOfType<CotcGameObject>();
+
+        cotc.GetCloud().Done(cloud => {
+            cloud.Login(
+                network: "email",
+                networkId: Email.text,
+                networkSecret: Password.text)
+            .Done(gamer => {
+                currentGamer = gamer;
+                Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
+                Debug.Log("Login data: " + gamer);
+                Debug.Log("Server time: " + gamer["servertime"]);
+
+                connectionEstablish = true;
+            }, ex => {
+                    // The exception should always be CotcException
+                    CotcException error = (CotcException)ex;
+                Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
+            });
+        });
+
+        //While the connection is not establish continue to wait
+        while (!connectionEstablish)
+        {
+            yield return null;
+        }
+
+        SetPlayerInformation();
+    }
+
+
+    void SetPlayerInformation()
+    {
+       
+        if(currentGamer == null)
+        {
+            Debug.Log("Impossible to set the player information, he is null");
+            return;
+        }
+
+        currentGamer.Profile.Get()
+        .Done(profileRes => {
+            emailPlayer.text = profileRes["email"];
+            displayName.text = profileRes["displayname"];
+            fisrtName.text = profileRes["firstName"];
         
+        }, ex => {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+            Debug.LogError("Could not get profile data due to error: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+           
+        });
+
+        playerInfomartion.gameObject.SetActive(true);
     }
 
     IEnumerator LoadGameScene()
@@ -113,17 +171,11 @@ public class LoginManager : MonoBehaviour
             yield return null;
         }
 
-        // Move the GameObject (you attach this in the Inspector) to the newly loaded Scene
+        // Move the GameObject which hold information about the player and his connection
         SceneManager.MoveGameObjectToScene(CotcSdk, SceneManager.GetSceneByName("GameScene"));
         SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("GameScene"));
 
-
         // Unload the previous Scene
         SceneManager.UnloadSceneAsync(currentScene);
-    }
-
-    public Gamer GetGamer()
-    {
-        return CurrentGamer;
     }
 }
