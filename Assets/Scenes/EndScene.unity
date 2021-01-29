@@ -714,7 +714,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '
+
+'
 --- !u!222 &665188777
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -870,7 +872,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '
+
+'
 --- !u!222 &758914092
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -948,7 +952,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '
+
+'
 --- !u!222 &997044051
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1123,7 +1129,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0
+  m_Text: 
 --- !u!222 &1564791983
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1182,7 +1188,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '
+
+'
 --- !u!222 &2014720284
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1331,6 +1339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ReplayButton: {fileID: 658706757}
   ExitButton: {fileID: 46652393}
+  Score: {fileID: 1564791982}
   LeaderBoardScore:
   - {fileID: 2014720283}
   - {fileID: 665188776}
@@ -1387,7 +1396,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '
+
+'
 --- !u!222 &2029869582
 CanvasRenderer:
   m_ObjectHideFlags: 0
