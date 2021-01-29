@@ -13,6 +13,8 @@ public class LeaderBoard : MonoBehaviour
     public Button ReplayButton;
     public Button ExitButton;
 
+    public Text Score;
+
     public List<Text> LeaderBoardScore;
 
     private CotcGameObject CotcSdk;
@@ -27,6 +29,33 @@ public class LeaderBoard : MonoBehaviour
 
         loginManager = FindObjectOfType<LoginManager>();
         CotcSdk = FindObjectOfType<CotcGameObject>();
+
+        PrintLeaderBoard();
+    }
+
+    void PrintLeaderBoard()
+    {
+        GameManager GameManagerObject = FindObjectOfType<GameManager>();
+
+        Score.text = (GameManagerObject.Score).ToString();
+
+        Gamer currentGamer = loginManager.GetGamer();
+
+        //Show HighScore
+        currentGamer.Scores.Domain("private").BestHighScores("TopDownShooter", LeaderBoardScore.Count, 1)
+        .Done(bestHighScoresRes => {
+            int index = 0;
+            foreach (var score in bestHighScoresRes)
+            {
+                LeaderBoardScore[index].text = (score.Rank + ". " + score.GamerInfo["profile"]["displayName"] + ": " + score.Value);
+                index++;
+            }
+        }, ex => {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+            Debug.LogError("Could not get best high scores: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+        });
+
     }
 
     // Update is called once per frame
