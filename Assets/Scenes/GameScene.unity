@@ -306,7 +306,7 @@ MonoBehaviour:
   scoreText: {fileID: 1447231431}
   timeText: {fileID: 1164550235}
   score: 0
-  time: 0.5
+  time: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,6 +1482,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 2103061366658770822, guid: dab1a1f36a1c9a943a409bd3f255e12f,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2103061366658770823, guid: dab1a1f36a1c9a943a409bd3f255e12f,
         type: 3}
