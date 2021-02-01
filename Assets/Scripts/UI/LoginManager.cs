@@ -70,21 +70,37 @@ public class LoginManager : MonoBehaviour
 
     void ConfirmNewFirstName()
     {
-            Bundle profileUpdates = Bundle.CreateObject();
-            profileUpdates["firstName"] = new Bundle(newFirstName.text);
+        StartCoroutine(UpdateFirstName());
 
-            // currentGamer is an object retrieved after one of the different Login functions.
-            currentGamer.Profile.Set(profileUpdates)
-            .Done(profileRes => {
-                Debug.Log("Profile data set: " + profileRes.ToString());
-            }, ex => {
+    }
+
+    IEnumerator UpdateFirstName()
+    {
+        bool updateFinish = false;
+
+        Bundle profileUpdates = Bundle.CreateObject();
+        profileUpdates["firstName"] = new Bundle(newFirstName.text);
+
+        // currentGamer is an object retrieved after one of the different Login functions.
+        currentGamer.Profile.Set(profileUpdates)
+        .Done(profileRes => {
+            updateFinish = true;
+            Debug.Log("Profile data set: " + profileRes.ToString());
+        }, ex => {
             // The exception should always be CotcException
             CotcException error = (CotcException)ex;
-                Debug.LogError("Could not set profile data due to error: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
-            });
+            Debug.LogError("Could not set profile data due to error: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+        });
+
+        //Wait until the update of the profile is complete
+        while(!updateFinish)
+        {
+            yield return null;
+        }
+
+        SetPlayerInformation();
 
         newFirstName.gameObject.SetActive(false);
-        SetPlayerInformation();
     }
 
     void EditEmail()
@@ -96,27 +112,13 @@ public class LoginManager : MonoBehaviour
     {
         //Test to know if a player is connected or launch in guest mode
         if (currentGamer == null)
-        { 
-            var cotc = FindObjectOfType<CotcGameObject>();
-
-            cotc.GetCloud().Done(cloud =>
-            {
-                cloud.LoginAnonymously()
-                .Done(gamer => {
-                    currentGamer = gamer;
-                    Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
-                    Debug.Log("Login data: " + gamer);
-                    Debug.Log("Server time: " + gamer["servertime"]);
-                }, ex => {
-                        // The exception should always be CotcException
-                        CotcException error = (CotcException)ex;
-                    Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
-                });
-            });
+        {
+            StartCoroutine(WaitLoginGuest());
         }
-
-        StartCoroutine(LoadGameScene());
-
+        else
+        {
+            StartCoroutine(LoadGameScene());
+        }
     }
 
     void Login()
@@ -129,10 +131,43 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(WaitLogin());
+        StartCoroutine(WaitLoginWithCredential());
+        
     }
 
-    IEnumerator WaitLogin()
+    IEnumerator WaitLoginGuest()
+    {
+        bool connectionEstablish = false;
+
+        var cotc = FindObjectOfType<CotcGameObject>();
+
+        cotc.GetCloud().Done(cloud =>
+        {
+            cloud.LoginAnonymously()
+            .Done(gamer => {
+                currentGamer = gamer;
+                connectionEstablish = true;
+                Debug.Log("Signed in succeeded (ID = " + gamer.GamerId + ")");
+                Debug.Log("Login data: " + gamer);
+                Debug.Log("Server time: " + gamer["servertime"]);
+            }, ex => {
+                    // The exception should always be CotcException
+                    CotcException error = (CotcException)ex;
+                Debug.LogError("Failed to login: " + error.ErrorCode + " (" + error.HttpStatusCode + ")");
+            });
+        });
+
+        //While the connection is not establish continue to wait
+        while (!connectionEstablish)
+        {
+            yield return null;
+        }
+
+        StartCoroutine(LoadGameScene());
+
+    }
+
+    IEnumerator WaitLoginWithCredential()
     {
         bool connectionEstablish = false;
 
@@ -169,11 +204,9 @@ public class LoginManager : MonoBehaviour
 
     void SetPlayerInformation()
     {
-       
         if(currentGamer == null)
         {
             Debug.Log("Impossible to set the player information, he is null");
-            return;
         }
 
         currentGamer.Profile.Get()
@@ -181,7 +214,6 @@ public class LoginManager : MonoBehaviour
             emailPlayer.text = profileRes["email"];
             displayName.text = profileRes["displayname"];
             fisrtName.text = profileRes["firstName"];
-        
         }, ex => {
             // The exception should always be CotcException
             CotcException error = (CotcException)ex;
@@ -190,6 +222,7 @@ public class LoginManager : MonoBehaviour
         });
 
         playerInfomartion.gameObject.SetActive(true);
+
     }
 
     IEnumerator LoadGameScene()
