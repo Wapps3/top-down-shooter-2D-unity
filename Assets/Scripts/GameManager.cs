@@ -28,6 +28,44 @@ public class GameManager : MonoBehaviour
     {
         loginManager = FindObjectOfType<LoginManager>();
         CotcSdk = FindObjectOfType<CotcGameObject>();
+
+        CreateAchievemments();
+    }
+
+    public void CreateAchievemments()
+    {
+        Debug.Log("Create achivements");
+        
+        Gamer currentGamer = loginManager.CurrentGamer;
+
+        Bundle achievementBundle = Bundle.CreateObject();
+
+        achievementBundle["type"] = new Bundle("limit");
+        achievementBundle["progress"] = new Bundle(0f);
+
+        Bundle config = Bundle.CreateObject();
+        config["unit"] = new Bundle("KilledMonsters");
+        config["maxValue"] = new Bundle(5);
+
+        achievementBundle["config"] = config;
+
+        currentGamer.Achievements.Domain("private").List().Done(listAchievementsRes => {
+
+            AchievementDefinition newAchivement = new AchievementDefinition("Kill 5 Monsters", achievementBundle);
+            listAchievementsRes.Add("Kill 5 Monsters", newAchivement);
+
+            foreach (var achievement in listAchievementsRes)
+            {
+                Debug.Log(achievement.Key + " : " + achievement.Value.Config.ToString() + ", progress : " + achievement.Value.Progress  );
+            }
+
+        }, ex => {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+            Debug.LogError("Could not list achievements: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+        });
+
+        Debug.Log("Finish to Create achivements");
     }
 
     // Update is called once per frame
