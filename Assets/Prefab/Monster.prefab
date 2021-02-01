@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2103061366658770823}
   - component: {fileID: 2103061366658770822}
-  - component: {fileID: 2103061366658770816}
   - component: {fileID: 2103061366658770817}
+  - component: {fileID: 2103061366658770816}
+  - component: {fileID: 6779061022501573747}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -83,21 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2103061366658770816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103061366658770821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7d4829da9260d4e928ece5d33c0ce0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Health: 10
-  HealthMax: 10
-  Point: 30
 --- !u!70 &2103061366658770817
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -114,3 +100,30 @@ CapsuleCollider2D:
   m_Offset: {x: -0.007811868, y: -0.0078118443}
   m_Size: {x: 0.14437626, y: 0.14437632}
   m_Direction: 0
+--- !u!114 &2103061366658770816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103061366658770821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7d4829da9260d4e928ece5d33c0ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 10
+  HealthMax: 10
+  Point: 30
+--- !u!114 &6779061022501573747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103061366658770821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4838822f0e0b9104e920122604a9fea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
