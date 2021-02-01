@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
 
     public void CreateAchievemments()
     {
-        Debug.Log("Create achivements");
         
         Gamer currentGamer = loginManager.CurrentGamer;
 
@@ -51,9 +50,9 @@ public class GameManager : MonoBehaviour
 
         currentGamer.Achievements.Domain("private").List().Done(listAchievementsRes => {
 
-            AchievementDefinition newAchivement = new AchievementDefinition("Kill 5 Monsters", achievementBundle);
-            listAchievementsRes.Add("Kill 5 Monsters", newAchivement);
-
+             AchievementDefinition newAchivement = new AchievementDefinition("Kill 5 Monsters", achievementBundle);
+             listAchievementsRes.Add("Kill 5 Monsters", newAchivement);
+           
             foreach (var achievement in listAchievementsRes)
             {
                 Debug.Log(achievement.Key + " : " + achievement.Value.Config.ToString() + ", progress : " + achievement.Value.Progress  );
@@ -65,7 +64,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Could not list achievements: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
         });
 
-        Debug.Log("Finish to Create achivements");
     }
 
     // Update is called once per frame

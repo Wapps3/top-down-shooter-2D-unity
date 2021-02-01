@@ -31,7 +31,6 @@ public class Monster : MonoBehaviour
 
             currentGamer.Achievements.Domain("private").List().Done(listAchievementsRes =>
             {
-
                     foreach (var achievement in listAchievementsRes)
                     {
                         if (achievement.Value.Config["unit"] == "KilledMonsters")
@@ -40,16 +39,11 @@ public class Monster : MonoBehaviour
                         }
                     }
 
-                    foreach (var achievement in listAchievementsRes)
-                    {
-                        Debug.Log(achievement.Key + " : " + achievement.Value.Config.ToString() + ", progress : " + achievement.Value.Progress);
-                    }
-
-                }, ex =>
-                {
-                // The exception should always be CotcException
-                CotcException error = (CotcException)ex;
-                    Debug.LogError("Could not list achievements: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
+            }, ex =>
+            {
+            // The exception should always be CotcException
+            CotcException error = (CotcException)ex;
+                Debug.LogError("Could not list achievements: " + error.ErrorCode + " (" + error.ErrorInformation + ")");
             });
             
         }
